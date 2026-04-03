@@ -3,9 +3,8 @@ FROM maven:3.8.5-openjdk-17 AS build
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Étape 2 : Exécution
-FROM openjdk:17-jdk-slim
-# On enlève le premier slash pour utiliser le chemin relatif au build
-COPY --from=build target/demo-0.0.1-SNAPSHOT.jar demo.jar
+# Étape 2 : Exécution (On change l'image ici)
+FROM eclipse-temurin:17-jdk-focal
+COPY --from=build target/demo-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","demo.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
